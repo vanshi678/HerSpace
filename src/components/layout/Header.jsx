@@ -1,0 +1,4 @@
+import { ShieldCheck } from 'lucide-react';
+export default function Header({ title, subtitle, action }) {
+  return <header className="mb-6"><div className="md:hidden flex items-center justify-between mb-5"><div className="flex items-center gap-2"><div className="w-9 h-9 rounded-2xl brand-gradient flex items-center justify-center shadow-softer"><ShieldCheck size={18} className="text-white" /></div><div><span className="font-display text-lg text-plum-800 block">HerSpace</span><span className="text-[9px] text-graysoft">your safety, your space ♥</span></div></div></div><div className="flex items-start justify-between gap-4"><div><h1 className="font-display text-2xl sm:text-3xl text-plum-900">{title}</h1>{subtitle && <p className="text-sm text-graysoft-dark mt-1">{subtitle}</p>}</div>{action}</div></header>;
+}
