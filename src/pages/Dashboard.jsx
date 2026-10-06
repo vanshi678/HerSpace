@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Users, PhoneCall, BookOpen, Lock } from 'lucide-react';
+import { Users, PhoneCall, Lock } from 'lucide-react';
 import Header from '../components/layout/Header';
 import Card from '../components/common/Card';
 import SosButton from '../components/sos/SosButton';
@@ -40,10 +40,9 @@ export default function Dashboard() {
         </div>
       </Card>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
         <QuickActionCard to="/contacts" icon={Users} label="My Contacts" tint="lavender" />
         <QuickActionCard to="/fake-call" icon={PhoneCall} label="Fake Call" tint="blush" />
-        <QuickActionCard to="/safety-hub" icon={BookOpen} label="Safety Hub" tint="lavender" />
         <QuickActionCard to="/vault" icon={Lock} label="Safety Vault" tint="plum" />
       </div>
 

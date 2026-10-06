@@ -13,7 +13,6 @@ import Dashboard from './pages/Dashboard';
 import TrustedContacts from './pages/TrustedContacts';
 import Sos from './pages/Sos';
 import FakeCall from './pages/FakeCall';
-import SafetyHub from './pages/SafetyHub';
 import SafetyVault from './pages/SafetyVault';
 import EmergencyHistory from './pages/EmergencyHistory';
 import NotFound from './pages/NotFound';
@@ -42,7 +41,6 @@ export default function App() {
                     <Route path="/contacts" element={<TrustedContacts />} />
                     <Route path="/sos" element={<Sos />} />
                     <Route path="/fake-call" element={<FakeCall />} />
-                    <Route path="/safety-hub" element={<SafetyHub />} />
                     <Route path="/vault" element={<SafetyVault />} />
                     <Route path="/history" element={<EmergencyHistory />} />
                   </Route>
