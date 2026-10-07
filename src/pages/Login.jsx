@@ -1,6 +1,15 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Mail, Lock, ShieldCheck, Eye, EyeOff, Sparkles } from 'lucide-react';
+import BotanicalBranch from '../components/decorations/BotanicalBranch';
+import {
+  Mail,
+  Lock,
+  ShieldCheck,
+  Eye,
+  EyeOff,
+  Sparkles,
+} from 'lucide-react';
+
 import { MobileAuthHero } from '../components/layout/AuthPanel';
 import Input from '../components/common/Input';
 import Button from '../components/common/Button';
@@ -12,21 +21,34 @@ export default function Login() {
   const { showToast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
-  const [form, setForm] = useState({ email: '', password: '' });
+
+  const [form, setForm] = useState({
+    email: '',
+    password: '',
+  });
+
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
     setSubmitting(true);
+
     try {
       login(form);
       showToast('Welcome back!');
-      navigate(location.state?.from || '/dashboard', { replace: true });
+      navigate(location.state?.from || '/dashboard', {
+        replace: true,
+      });
     } catch (err) {
       setError(err.message);
     } finally {
@@ -35,24 +57,45 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="auth-phone">
-        <MobileAuthHero />
+    <div className="min-h-screen bg-warmwhite flex items-center justify-center px-4 py-8 sm:px-6">
 
-        <main className="w-full max-w-[680px] mx-auto px-6 sm:px-10 lg:px-12 py-10 sm:py-12 lg:py-14">
-          <div className="text-center mb-10">
-            <p className="inline-flex items-center gap-2 text-pink-500 text-xs sm:text-sm font-bold tracking-[0.18em] uppercase mb-4">
-              <Sparkles size={14} /> Welcome back <Sparkles size={14} />
+      {/* Login card */}
+      <div className="relative w-full max-w-[520px] overflow-hidden rounded-[28px] border border-lavender bg-white shadow-auth">
+
+        <BotanicalBranch
+          className="absolute right-0 top-3 w-24 sm:w-28 opacity-70"
+          flip={false}
+        />
+
+        {/* Header */}
+        <div className="relative px-6 pt-9 sm:px-10 sm:pt-11">
+          <MobileAuthHero />
+
+          <div className="mt-9 text-center">
+            <p className="mb-3 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-pink-500">
+              <Sparkles size={13} />
+              Welcome back
+              <Sparkles size={13} />
             </p>
-            <h2 className="font-display text-4xl sm:text-[42px] leading-tight text-plum-900">
+
+            <h2 className="font-display text-3xl sm:text-4xl leading-tight text-plum-900">
               Ready when you are
             </h2>
-            <p className="text-base sm:text-lg text-graysoft-dark mt-3">
+
+            <p className="mt-3 text-sm sm:text-base text-graysoft-dark">
               Log in to your private safety space.
             </p>
           </div>
+        </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+        {/* Form */}
+        <main className="relative px-6 pb-8 pt-8 sm:px-10 sm:pb-10">
+
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-5"
+            noValidate
+          >
             <Input
               id="email"
               name="email"
@@ -80,56 +123,91 @@ export default function Login() {
                 onChange={handleChange}
                 className="pr-12"
               />
+
               <button
                 type="button"
-                aria-label={showPassword ? 'Hide password' : 'Show password'}
-                onClick={() => setShowPassword((v) => !v)}
-                className="absolute right-4 bottom-3.5 text-graysoft hover:text-plum-600"
+                aria-label={
+                  showPassword
+                    ? 'Hide password'
+                    : 'Show password'
+                }
+                onClick={() =>
+                  setShowPassword((value) => !value)
+                }
+                className="absolute right-4 bottom-3.5 text-graysoft transition-colors hover:text-plum-600"
               >
-                {showPassword ? <EyeOff size={19} /> : <Eye size={19} />}
+                {showPassword ? (
+                  <EyeOff size={19} />
+                ) : (
+                  <Eye size={19} />
+                )}
               </button>
             </div>
 
             {error && (
-              <p role="alert" className="text-sm font-medium text-emergency-dark bg-emergency-light rounded-xl px-4 py-2.5">
+              <p
+                role="alert"
+                className="rounded-xl bg-emergency-light px-4 py-2.5 text-sm font-medium text-emergency-dark"
+              >
                 {error}
               </p>
             )}
 
-            <Button type="submit" full size="lg" disabled={submitting}>
+            <Button
+              type="submit"
+              full
+              size="lg"
+              disabled={submitting}
+            >
               {submitting ? 'Logging in…' : 'Log in'}
             </Button>
           </form>
 
-          <div className="flex items-center gap-3 my-8">
+          {/* Divider */}
+          <div className="my-7 flex items-center gap-3">
             <span className="h-px flex-1 bg-lavender-dark/60" />
-            <span className="text-sm text-graysoft">or</span>
+
+            <span className="text-xs text-graysoft">
+              or
+            </span>
+
             <span className="h-px flex-1 bg-lavender-dark/60" />
           </div>
 
-          <div className="flex justify-center gap-4">
+          {/* Social buttons */}
+          <div className="flex justify-center gap-3">
             {['G', 'f', '●'].map((x, i) => (
               <button
                 type="button"
                 key={i}
-                className="w-14 h-14 rounded-full border border-lavender bg-white shadow-softer text-plum-700 font-semibold hover:bg-plum-50"
+                className="flex h-12 w-12 items-center justify-center rounded-full border border-lavender bg-white font-semibold text-plum-700 shadow-softer transition-all hover:bg-lavender-light hover:-translate-y-0.5"
               >
                 {x}
               </button>
             ))}
           </div>
 
-          <p className="text-base text-graysoft-dark text-center mt-8">
+          {/* Register */}
+          <p className="mt-7 text-center text-sm text-graysoft-dark">
             New to HerSpace?{' '}
-            <Link to="/register" className="text-pink-500 font-bold hover:text-pink-600">
+            <Link
+              to="/register"
+              className="font-bold text-pink-500 transition-colors hover:text-pink-600"
+            >
               Create an account
             </Link>
           </p>
 
-          <p className="text-xs text-graysoft text-center mt-8 flex items-center justify-center gap-1">
-            <ShieldCheck size={13} /> Private safety space
+          {/* Privacy */}
+          <p className="mt-6 flex items-center justify-center gap-1.5 text-xs text-graysoft">
+            <ShieldCheck size={13} />
+            Private safety space
           </p>
         </main>
+        <BotanicalBranch
+  className="absolute bottom-0 left-0 w-24 sm:w-28 opacity-50"
+  flip={true}
+/>
       </div>
     </div>
   );

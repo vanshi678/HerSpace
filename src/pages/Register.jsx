@@ -47,11 +47,13 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="auth-phone">
-        <MobileAuthHero register />
+  <div className="min-h-screen bg-warmwhite flex items-center justify-center px-4 py-8 sm:px-6">
+    <div className="relative w-full max-w-[680px] overflow-hidden rounded-[28px] border border-lavender bg-white shadow-auth">
+      <MobileAuthHero register />
 
-        <main className="w-full max-w-[680px] mx-auto px-6 sm:px-10 lg:px-12 py-10 sm:py-12">
+      <main
+        className="w-full px-6 sm:px-10 lg:px-12 py-10 sm:py-12"
+      >
           <div className="text-center mb-8">
             <p className="inline-flex items-center gap-2 text-pink-500 text-xs sm:text-sm font-bold tracking-[0.15em] uppercase mb-4">
               <Sparkles size={14} /> Create your account <Sparkles size={14} />

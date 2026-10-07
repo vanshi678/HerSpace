@@ -1,5 +1,5 @@
 const VARIANTS = {
-  primary: 'brand-button text-white shadow-pinkglow',
+  primary: 'bg-[#668F80] text-white hover:bg-[#49695E]',
   secondary: 'bg-lavender text-plum-700 hover:bg-lavender-dark',
   outline: 'bg-white text-plum-700 border border-lavender-dark hover:bg-plum-50',
   ghost: 'bg-transparent text-plum-600 hover:bg-plum-50',

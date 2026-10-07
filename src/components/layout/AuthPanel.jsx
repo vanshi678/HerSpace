@@ -4,27 +4,31 @@ export default function AuthPanel() {
   return null;
 }
 
-export function MobileAuthHero({ register = false }) {
+export function MobileAuthHero() {
   return (
-    <section className="relative brand-gradient text-white min-h-[360px] sm:min-h-[385px] flex items-start justify-center overflow-hidden">
-      <div className="absolute -top-24 -right-20 w-64 h-64 rounded-full bg-white/10" />
-      <div className="absolute top-32 -left-24 w-72 h-72 rounded-full bg-white/10" />
+    <section className="relative bg-transparent overflow-hidden">
+      {/* Small botanical decoration */}
 
-      <div className="relative z-10 text-center px-6 pt-12 sm:pt-14">
-        <div className="mx-auto w-20 h-20 rounded-[26px] bg-white/20 border border-white/25 flex items-center justify-center shadow-lg mb-5 backdrop-blur-sm">
-          <ShieldCheck size={40} strokeWidth={2.2} />
+      <div className="relative z-10 flex flex-col items-center pt-2 sm:pt-4">
+        <div className="flex items-center gap-2">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-lavender">
+            <ShieldCheck
+              size={21}
+              strokeWidth={2}
+              className="text-plum-600"
+            />
+          </div>
+
+          <h1 className="font-display text-3xl sm:text-4xl font-semibold tracking-tight">
+            <span className="text-plum-700">Her</span>
+            <span className="text-pink-500">Space</span>
+          </h1>
         </div>
 
-        <h1 className="font-display text-[46px] sm:text-[54px] leading-none">
-          HerSpace
-        </h1>
-
-        <p className="mt-3 text-lg sm:text-xl text-white/95">
+        <p className="mt-2 text-xs sm:text-sm text-graysoft-dark">
           Your safety, your space ♥
         </p>
       </div>
-
-      <div className="absolute left-0 right-0 bottom-[-1px] h-[92px] bg-white rounded-[50%_50%_0_0/100%_100%_0_0]" />
     </section>
   );
 }

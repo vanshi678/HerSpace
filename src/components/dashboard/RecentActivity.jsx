@@ -11,8 +11,8 @@ export default function RecentActivity({ events }) {
   return (
     <Card>
       <div className="flex items-center justify-between mb-4">
-        <h2 className="font-display text-lg text-plum-900">Recent activity</h2>
-        <Link to="/history" className="text-xs font-semibold text-plum-600 hover:underline flex items-center gap-0.5">
+        <h2 className="font-display text-lg text-[#24352F]">Recent activity</h2>
+        <Link to="/history" className="text-xs font-semibold text-[#49695E] hover:underline flex items-center gap-0.5">
           View all <ChevronRight size={14} />
         </Link>
       </div>
@@ -28,7 +28,7 @@ export default function RecentActivity({ events }) {
           {recent.map((event) => (
             <li key={event.id} className="flex items-center justify-between gap-3 py-2">
               <div>
-                <p className="text-sm font-semibold text-plum-800">
+                <p className="text-sm font-semibold text-[#49695E]">
                   {formatDateShort(event.startedAt)} &middot; {formatTime(event.startedAt)}
                 </p>
                 <p className="text-xs text-graysoft-dark mt-0.5">

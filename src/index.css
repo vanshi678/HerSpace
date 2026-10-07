@@ -3,41 +3,218 @@
 @config "../tailwind.config.js";
 @import "tailwindcss";
 
-* { -webkit-tap-highlight-color: transparent; }
-html, body { min-height: 100%; }
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
 body {
   @apply bg-warmwhite text-plum-900 font-body antialiased;
+
   background:
-    radial-gradient(circle at 0% 0%, rgba(226, 202, 255, .58), transparent 34%),
-    radial-gradient(circle at 100% 10%, rgba(247, 205, 231, .58), transparent 34%),
-    linear-gradient(135deg, #fff9ff 0%, #f8f1ff 48%, #fff1f8 100%);
+    radial-gradient(circle at 0% 0%,
+      rgba(201, 214, 197, 0.55),
+      transparent 34%),
+    radial-gradient(circle at 100% 10%,
+      rgba(250, 218, 221, 0.55),
+      transparent 34%),
+    linear-gradient(135deg,
+      #faf9f4 0%,
+      #f5f6ef 48%,
+      #fff5f5 100%);
+
   background-attachment: fixed;
 }
-#root { min-height: 100vh; }
 
-a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible, [tabindex]:focus-visible {
-  outline: 2px solid #8A5BE0;
+#root {
+  min-height: 100vh;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid #668F80;
   outline-offset: 2px;
   border-radius: 10px;
 }
-::selection { background: #eadfff; color: #2f1a63; }
-::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-thumb { background: #d8c3f5; border-radius: 999px; }
-::-webkit-scrollbar-track { background: transparent; }
+
+::selection {
+  background: #E4EBDD;
+  color: #24352F;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #C9D6C5;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
 
 @layer components {
-  .brand-gradient { background: linear-gradient(135deg, #7547d4 0%, #9c5bdd 48%, #e353ad 100%); }
-  .brand-button { background: linear-gradient(100deg, #7547d4 0%, #9c5bdd 52%, #e353ad 100%); box-shadow: 0 14px 30px -12px rgba(224, 78, 166, .55); }
-  .brand-button:hover { filter: brightness(1.03); transform: translateY(-1px); }
-  .soft-surface { background: rgba(255,255,255,.88); border: 1px solid rgba(234,223,255,.9); box-shadow: 0 12px 34px -12px rgba(108,67,188,.16); }
-  .auth-phone { width: 100%; min-height: 100vh; border-radius: 0; overflow: hidden; background: #fff; box-shadow: none; }
+  .brand-gradient {
+    background: linear-gradient(135deg,
+        #668F80 0%,
+        #5F8878 52%,
+        #D9829A 100%);
+  }
+
+  .brand-button {
+    background: linear-gradient(100deg,
+        #668F80 0%,
+        #5F8878 52%,
+        #D9829A 100%);
+
+    box-shadow: 0 14px 30px -12px rgba(217, 130, 154, 0.35);
+  }
+
+  .brand-button:hover {
+    filter: brightness(1.03);
+    transform: translateY(-1px);
+  }
+
+  .soft-surface {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(228, 235, 221, 0.95);
+    box-shadow: 0 12px 34px -12px rgba(73, 105, 94, 0.14);
+  }
+
+  .auth-phone {
+    width: 100%;
+    min-height: 100vh;
+    border-radius: 0;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: none;
+  }
 }
 
 @media (max-width: 639px) {
-  body { background: #fff8ff; }
-  .auth-phone { width: 100%; min-height: 100vh; border-radius: 0; box-shadow: none; }
+  body {
+    background: #FAF9F4;
+  }
+
+  .auth-phone {
+    width: 100%;
+    min-height: 100vh;
+    border-radius: 0;
+    box-shadow: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
+
+/* ================================
+   HerSpace Botanical Login Theme
+   ================================ */
+
+.shadow-auth {
+  box-shadow:
+    0 20px 50px -20px rgba(73, 105, 94, 0.18),
+    0 8px 24px -12px rgba(73, 105, 94, 0.12);
+}
+
+/* Botanical decorations */
+
+.botanical {
+  position: absolute;
+  width: 110px;
+  height: 130px;
+  pointer-events: none;
+  opacity: 0.72;
+}
+
+.botanical-top-right {
+  top: 5px;
+  right: 2px;
+  transform: rotate(8deg);
+}
+
+.botanical-bottom-left {
+  bottom: -8px;
+  left: -5px;
+  transform: rotate(-18deg);
+  opacity: 0.55;
+}
+
+.botanical .stem {
+  position: absolute;
+  width: 2px;
+  height: 105px;
+  background: #668f80;
+  border-radius: 999px;
+  left: 52px;
+  top: 20px;
+  transform: rotate(18deg);
+  transform-origin: bottom;
+}
+
+.botanical .leaf {
+  position: absolute;
+  display: block;
+  width: 17px;
+  height: 38px;
+  border-radius: 100% 0 100% 0;
+  background: #a8b9a3;
+}
+
+.botanical .leaf-1 {
+  left: 28px;
+  top: 55px;
+  transform: rotate(-48deg);
+}
+
+.botanical .leaf-2 {
+  left: 58px;
+  top: 42px;
+  background: #668f80;
+  transform: rotate(38deg);
+}
+
+.botanical .leaf-3 {
+  left: 34px;
+  top: 82px;
+  background: #e4ebdd;
+  transform: rotate(-58deg);
+}
+
+.botanical .flower {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #d9829a;
+  box-shadow:
+    7px 0 #fadadd,
+    3px -6px #fadadd,
+    3px 6px #fadadd;
+}
+
+.botanical .flower-1 {
+  left: 70px;
+  top: 27px;
+}
+
