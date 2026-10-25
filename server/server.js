@@ -12,9 +12,14 @@ const authRoutes = require('./routes/authRoutes');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://her-space-flax.vercel.app',
+];
+
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: allowedOrigins,
     credentials: true,
   })
 );
@@ -48,7 +53,7 @@ async function startServer() {
     console.log('🌿 HerSpace MongoDB connected successfully');
 
     app.listen(PORT, () => {
-      console.log(`HerSpace server running at http://localhost:${PORT}`);
+      console.log(`HerSpace server running on port ${PORT}`);
     });
   } catch (error) {
     console.error('❌ Failed to start HerSpace:', error.message);
