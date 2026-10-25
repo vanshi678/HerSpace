@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import BotanicalBranch from '../components/decorations/BotanicalBranch';
@@ -38,19 +39,21 @@ export default function Login() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setSubmitting(true);
 
     try {
-      login(form);
+      await login(form);
+
       showToast('Welcome back!');
+
       navigate(location.state?.from || '/dashboard', {
         replace: true,
       });
     } catch (err) {
-      setError(err.message);
+      setError(err.message || 'Login failed. Please try again.');
     } finally {
       setSubmitting(false);
     }
@@ -58,16 +61,12 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-warmwhite flex items-center justify-center px-4 py-8 sm:px-6">
-
-      {/* Login card */}
       <div className="relative w-full max-w-[520px] overflow-hidden rounded-[28px] border border-lavender bg-white shadow-auth">
-
         <BotanicalBranch
           className="absolute right-0 top-3 w-24 sm:w-28 opacity-70"
           flip={false}
         />
 
-        {/* Header */}
         <div className="relative px-6 pt-9 sm:px-10 sm:pt-11">
           <MobileAuthHero />
 
@@ -88,9 +87,7 @@ export default function Login() {
           </div>
         </div>
 
-        {/* Form */}
         <main className="relative px-6 pb-8 pt-8 sm:px-10 sm:pb-10">
-
           <form
             onSubmit={handleSubmit}
             className="space-y-5"
@@ -127,13 +124,9 @@ export default function Login() {
               <button
                 type="button"
                 aria-label={
-                  showPassword
-                    ? 'Hide password'
-                    : 'Show password'
+                  showPassword ? 'Hide password' : 'Show password'
                 }
-                onClick={() =>
-                  setShowPassword((value) => !value)
-                }
+                onClick={() => setShowPassword((value) => !value)}
                 className="absolute right-4 bottom-3.5 text-graysoft transition-colors hover:text-plum-600"
               >
                 {showPassword ? (
@@ -163,18 +156,12 @@ export default function Login() {
             </Button>
           </form>
 
-          {/* Divider */}
           <div className="my-7 flex items-center gap-3">
             <span className="h-px flex-1 bg-lavender-dark/60" />
-
-            <span className="text-xs text-graysoft">
-              or
-            </span>
-
+            <span className="text-xs text-graysoft">or</span>
             <span className="h-px flex-1 bg-lavender-dark/60" />
           </div>
 
-          {/* Social buttons */}
           <div className="flex justify-center gap-3">
             {['G', 'f', '●'].map((x, i) => (
               <button
@@ -187,7 +174,6 @@ export default function Login() {
             ))}
           </div>
 
-          {/* Register */}
           <p className="mt-7 text-center text-sm text-graysoft-dark">
             New to HerSpace?{' '}
             <Link
@@ -198,16 +184,16 @@ export default function Login() {
             </Link>
           </p>
 
-          {/* Privacy */}
           <p className="mt-6 flex items-center justify-center gap-1.5 text-xs text-graysoft">
             <ShieldCheck size={13} />
             Private safety space
           </p>
         </main>
+
         <BotanicalBranch
-  className="absolute bottom-0 left-0 w-24 sm:w-28 opacity-50"
-  flip={true}
-/>
+          className="absolute bottom-0 left-0 w-24 sm:w-28 opacity-50"
+          flip={true}
+        />
       </div>
     </div>
   );

@@ -1,51 +1,45 @@
-import { readJSON, writeJSON, removeKey, STORAGE_KEYS } from './storage';
 
-// NOTE: This is an MVP, frontend-only auth flow. Passwords are stored in
-// localStorage for demo purposes only. A real backend must replace this
-// with proper hashing, sessions, and validation before going to production.
+const API_URL = 'https://herspace-qpl9.onrender.com/api/auth';
 
-function getUsers() {
-  return readJSON(STORAGE_KEYS.USERS, []);
-}
+async function sendRequest(endpoint, payload) {
+  let response;
 
-function saveUsers(users) {
-  writeJSON(STORAGE_KEYS.USERS, users);
-}
-
-export function registerUser({ fullName, email, password }) {
-  const users = getUsers();
-  const exists = users.some((u) => u.email.toLowerCase() === email.toLowerCase());
-  if (exists) {
-    throw new Error('An account with this email already exists.');
+  try {
+    response = await fetch(`${API_URL}/${endpoint}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+  } catch {
+    throw new Error(
+      'Unable to connect to HerSpace. Please try again.'
+    );
   }
-  const newUser = {
-    id: crypto.randomUUID(),
-    fullName,
-    email,
-    password, // demo-only, replace with backend hashing
-    createdAt: new Date().toISOString(),
-  };
-  saveUsers([...users, newUser]);
-  const session = { id: newUser.id, fullName: newUser.fullName, email: newUser.email };
-  writeJSON(STORAGE_KEYS.SESSION, session);
-  return session;
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || 'Something went wrong.');
+  }
+
+  return data.user;
 }
 
-export function loginUser({ email, password }) {
-  const users = getUsers();
-  const user = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
-  if (!user || user.password !== password) {
-    throw new Error('That email and password don\u2019t match our records.');
-  }
-  const session = { id: user.id, fullName: user.fullName, email: user.email };
-  writeJSON(STORAGE_KEYS.SESSION, session);
-  return session;
+export async function registerUser({ fullName, email, password }) {
+  return sendRequest('register', { fullName, email, password });
+}
+
+export async function loginUser({ email, password }) {
+  return sendRequest('login', { email, password });
 }
 
 export function logoutUser() {
-  removeKey(STORAGE_KEYS.SESSION);
+  // Backend token/session support will be added separately.
 }
 
 export function getSession() {
-  return readJSON(STORAGE_KEYS.SESSION, null);
+  // Do not restore a fake localStorage login session.
+  return null;
 }

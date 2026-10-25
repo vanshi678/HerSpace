@@ -1,19 +1,24 @@
+
 import { createContext, useContext, useState, useCallback } from 'react';
-import { registerUser, loginUser, logoutUser, getSession } from '../services/authService';
+import {
+  registerUser,
+  loginUser,
+  logoutUser,
+} from '../services/authService';
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(() => getSession());
+  const [user, setUser] = useState(null);
 
-  const register = useCallback((payload) => {
-    const session = registerUser(payload);
+  const register = useCallback(async (payload) => {
+    const session = await registerUser(payload);
     setUser(session);
     return session;
   }, []);
 
-  const login = useCallback((payload) => {
-    const session = loginUser(payload);
+  const login = useCallback(async (payload) => {
+    const session = await loginUser(payload);
     setUser(session);
     return session;
   }, []);
@@ -23,13 +28,27 @@ export function AuthProvider({ children }) {
     setUser(null);
   }, []);
 
-  const value = { user, isAuthenticated: Boolean(user), register, login, logout };
+  const value = {
+    user,
+    isAuthenticated: Boolean(user),
+    register,
+    login,
+    logout,
+  };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error('useAuth must be used within AuthProvider');
+
+  if (!ctx) {
+    throw new Error('useAuth must be used within AuthProvider');
+  }
+
   return ctx;
 }
