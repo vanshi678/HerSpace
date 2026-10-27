@@ -1,17 +1,17 @@
-
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import BotanicalBranch from '../components/decorations/BotanicalBranch';
+import { signInWithPopup } from 'firebase/auth';
 import {
   Mail,
   Lock,
   ShieldCheck,
   Eye,
   EyeOff,
-  Sparkles,
 } from 'lucide-react';
 
+import { auth, googleProvider } from '../firebase';
 import { MobileAuthHero } from '../components/layout/AuthPanel';
+import BotanicalBranch from '../components/decorations/BotanicalBranch';
 import Input from '../components/common/Input';
 import Button from '../components/common/Button';
 import { useAuth } from '../context/AuthContext';
@@ -39,13 +39,17 @@ export default function Login() {
     });
   };
 
+  // Email and password login
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setSubmitting(true);
 
     try {
-      await login(form);
+      await login({
+        email: form.email.trim(),
+        password: form.password,
+      });
 
       showToast('Welcome back!');
 
@@ -59,12 +63,64 @@ export default function Login() {
     }
   };
 
+  // Google login
+  const handleGoogleLogin = async () => {
+    setError('');
+    setSubmitting(true);
+
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const idToken = await result.user.getIdToken();
+
+      const response = await fetch(
+        'https://herspace-qpl9.onrender.com/api/auth/google',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${idToken}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || 'Google sign-in could not be completed.'
+        );
+      }
+
+      showToast('Welcome to HerSpace!');
+
+      navigate(location.state?.from || '/dashboard', {
+        replace: true,
+      });
+    } catch (err) {
+      if (
+        err.code === 'auth/popup-closed-by-user' ||
+        err.code === 'auth/cancelled-popup-request'
+      ) {
+        setError('Google sign-in was cancelled. Please try again.');
+      } else if (err.code === 'auth/unauthorized-domain') {
+        setError(
+          'This website domain is not authorized in Firebase.'
+        );
+      } else {
+        setError(
+          err.message || 'Google sign-in failed. Please try again.'
+        );
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-warmwhite flex items-center justify-center px-4 py-8 sm:px-6">
       <div className="relative w-full max-w-[520px] overflow-hidden rounded-[28px] border border-lavender bg-white shadow-auth">
         <BotanicalBranch
-          className="absolute right-0 top-3 w-24 sm:w-28 opacity-70"
-          flip={false}
+          className="pointer-events-none absolute right-0 top-3 w-24 opacity-70 sm:w-28"
         />
 
         <div className="relative px-6 pt-9 sm:px-10 sm:pt-11">
@@ -75,11 +131,11 @@ export default function Login() {
               Welcome back
             </p>
 
-            <h2 className="font-display text-3xl sm:text-4xl leading-tight text-plum-900">
+            <h2 className="font-display text-3xl leading-tight text-plum-900 sm:text-4xl">
               Ready when you are
             </h2>
 
-            <p className="mt-3 text-sm sm:text-base text-graysoft-dark">
+            <p className="mt-3 text-sm text-graysoft-dark sm:text-base">
               Log in to your private safety space.
             </p>
           </div>
@@ -124,7 +180,9 @@ export default function Login() {
                 aria-label={
                   showPassword ? 'Hide password' : 'Show password'
                 }
-                onClick={() => setShowPassword((value) => !value)}
+                onClick={() =>
+                  setShowPassword((value) => !value)
+                }
                 className="absolute right-4 bottom-3.5 text-graysoft transition-colors hover:text-plum-600"
               >
                 {showPassword ? (
@@ -150,7 +208,7 @@ export default function Login() {
               size="lg"
               disabled={submitting}
             >
-              {submitting ? 'Logging in…' : 'Log in'}
+              {submitting ? 'Please wait…' : 'Log in'}
             </Button>
           </form>
 
@@ -160,17 +218,39 @@ export default function Login() {
             <span className="h-px flex-1 bg-lavender-dark/60" />
           </div>
 
-          <div className="flex justify-center gap-3">
-            {['G', 'f', '●'].map((x, i) => (
-              <button
-                type="button"
-                key={i}
-                className="flex h-12 w-12 items-center justify-center rounded-full border border-lavender bg-white font-semibold text-plum-700 shadow-softer transition-all hover:bg-lavender-light hover:-translate-y-0.5"
-              >
-                {x}
-              </button>
-            ))}
-          </div>
+          <button
+            type="button"
+            onClick={handleGoogleLogin}
+            disabled={submitting}
+            className="flex w-full items-center justify-center gap-3 rounded-xl border border-lavender bg-white px-5 py-4 font-semibold text-plum-800 shadow-softer transition-all hover:-translate-y-0.5 hover:bg-lavender-light disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            <svg
+              viewBox="0 0 48 48"
+              className="h-5 w-5 shrink-0"
+              aria-hidden="true"
+            >
+              <path
+                fill="#4285F4"
+                d="M43.6 24.5c0-1.4-.1-2.8-.4-4.1H24v7.8h11a9.4 9.4 0 0 1-4.1 6.2v5.1h6.7c3.9-3.6 6-8.9 6-15Z"
+              />
+              <path
+                fill="#34A853"
+                d="M24 44c5.5 0 10.1-1.8 13.5-4.9l-6.7-5.1c-1.8 1.2-4.1 2-6.8 2-5.2 0-9.6-3.5-11.2-8.2H5.9v5.3A20 20 0 0 0 24 44Z"
+              />
+              <path
+                fill="#FBBC05"
+                d="M12.8 27.8a12 12 0 0 1 0-7.6v-5.3H5.9a20 20 0 0 0 0 18.2l6.9-5.3Z"
+              />
+              <path
+                fill="#EA4335"
+                d="M24 12.1c3 0 5.7 1 7.8 3.1l5.8-5.8A19.4 19.4 0 0 0 24 4 20 20 0 0 0 5.9 14.9l6.9 5.3c1.6-4.7 6-8.1 11.2-8.1Z"
+              />
+            </svg>
+
+            {submitting
+              ? 'Please wait…'
+              : 'Continue with Google'}
+          </button>
 
           <p className="mt-7 text-center text-sm text-graysoft-dark">
             New to HerSpace?{' '}
@@ -189,8 +269,8 @@ export default function Login() {
         </main>
 
         <BotanicalBranch
-          className="absolute bottom-0 left-0 w-24 sm:w-28 opacity-50"
-          flip={true}
+          className="pointer-events-none absolute bottom-0 left-0 w-24 opacity-50 sm:w-28"
+          flip
         />
       </div>
     </div>

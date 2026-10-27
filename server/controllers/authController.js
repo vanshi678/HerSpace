@@ -1,4 +1,4 @@
-
+const admin = require('../firebaseAdmin');
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
 
@@ -121,6 +121,72 @@ const loginUser = async (req, res) => {
     });
   }
 };
+const googleLogin = async (req, res) => {
+  try {
+    const authorization = req.headers.authorization || '';
+
+    if (!authorization.startsWith('Bearer ')) {
+      return res.status(401).json({
+        message: 'Google authentication token is required',
+      });
+    }
+
+    const idToken = authorization.slice(7);
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
+
+    if (!decodedToken.email || !decodedToken.email_verified) {
+      return res.status(401).json({
+        message: 'A verified Google email is required',
+      });
+    }
+
+    const email = decodedToken.email.trim().toLowerCase();
+    const fullName =
+      decodedToken.name || email.split('@')[0];
+
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      user = await User.create({
+        fullName,
+        email,
+        authProvider: 'google',
+        googleUid: decodedToken.uid,
+      });
+    } else if (
+      user.authProvider === 'google' &&
+      user.googleUid &&
+      user.googleUid !== decodedToken.uid
+    ) {
+      return res.status(401).json({
+        message: 'Google account verification failed',
+      });
+    } else if (user.authProvider === 'google' && !user.googleUid) {
+      user.googleUid = decodedToken.uid;
+      await user.save();
+    }
+
+    return res.status(200).json({
+      message: 'Google login successful',
+      user: {
+        id: user._id,
+        fullName: user.fullName,
+        email: user.email,
+      },
+    });
+  } catch (error) {
+    console.error('Google login error:', error.message);
+
+    return res.status(401).json({
+      message: 'Google login failed. Please try again.',
+    });
+  }
+};
 
 
-module.exports = { registerUser, loginUser };
+module.exports = {
+  registerUser,
+  loginUser,
+  googleLogin,
+};
+
