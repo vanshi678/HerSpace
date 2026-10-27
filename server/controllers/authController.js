@@ -1,4 +1,4 @@
-const admin = require('../firebaseAdmin');
+const adminAuth = require('../firebaseAdmin');
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
 
@@ -132,7 +132,7 @@ const googleLogin = async (req, res) => {
     }
 
     const idToken = authorization.slice(7);
-    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    const decodedToken = await adminAuth.verifyIdToken(idToken);
 
     if (!decodedToken.email || !decodedToken.email_verified) {
       return res.status(401).json({
