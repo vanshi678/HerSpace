@@ -1,5 +1,11 @@
 
-import { createContext, useContext, useState, useCallback } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+} from 'react';
+
 import {
   registerUser,
   loginUser,
@@ -23,6 +29,12 @@ export function AuthProvider({ children }) {
     return session;
   }, []);
 
+  // Google login: store the verified backend user.
+  const googleLogin = useCallback((googleUser) => {
+    setUser(googleUser);
+    return googleUser;
+  }, []);
+
   const logout = useCallback(() => {
     logoutUser();
     setUser(null);
@@ -33,6 +45,7 @@ export function AuthProvider({ children }) {
     isAuthenticated: Boolean(user),
     register,
     login,
+    googleLogin,
     logout,
   };
 
@@ -47,7 +60,9 @@ export function useAuth() {
   const ctx = useContext(AuthContext);
 
   if (!ctx) {
-    throw new Error('useAuth must be used within AuthProvider');
+    throw new Error(
+      'useAuth must be used within AuthProvider'
+    );
   }
 
   return ctx;

@@ -18,7 +18,7 @@ import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 
 export default function Login() {
-  const { login } = useAuth();
+  const { login, googleLogin } = useAuth();
   const { showToast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
@@ -64,6 +64,7 @@ export default function Login() {
   };
 
   // Google login
+
   const handleGoogleLogin = async () => {
     setError('');
     setSubmitting(true);
@@ -77,7 +78,6 @@ export default function Login() {
         {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
             Authorization: `Bearer ${idToken}`,
           },
         }
@@ -91,21 +91,19 @@ export default function Login() {
         );
       }
 
+      // Save the user returned by the verified backend.
+      googleLogin(data.user);
+
       showToast('Welcome to HerSpace!');
 
       navigate(location.state?.from || '/dashboard', {
         replace: true,
       });
     } catch (err) {
-      if (
-        err.code === 'auth/popup-closed-by-user' ||
-        err.code === 'auth/cancelled-popup-request'
-      ) {
+      if (err.code === 'auth/popup-closed-by-user') {
         setError('Google sign-in was cancelled. Please try again.');
       } else if (err.code === 'auth/unauthorized-domain') {
-        setError(
-          'This website domain is not authorized in Firebase.'
-        );
+        setError('This website domain is not authorized in Firebase.');
       } else {
         setError(
           err.message || 'Google sign-in failed. Please try again.'
