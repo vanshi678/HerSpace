@@ -102,9 +102,7 @@ export default function Register() {
         <main className="w-full px-6 sm:px-10 lg:px-12 py-10 sm:py-12">
           <div className="text-center mb-8">
             <p className="inline-flex items-center gap-2 text-pink-500 text-xs sm:text-sm font-bold tracking-[0.15em] uppercase mb-4">
-              <Sparkles size={14} />
               Create your account
-              <Sparkles size={14} />
             </p>
 
             <h2 className="font-display text-4xl sm:text-[40px] leading-tight text-plum-900">

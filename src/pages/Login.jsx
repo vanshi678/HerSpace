@@ -72,9 +72,7 @@ export default function Login() {
 
           <div className="mt-9 text-center">
             <p className="mb-3 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-pink-500">
-              <Sparkles size={13} />
               Welcome back
-              <Sparkles size={13} />
             </p>
 
             <h2 className="font-display text-3xl sm:text-4xl leading-tight text-plum-900">
